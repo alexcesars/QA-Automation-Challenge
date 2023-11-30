@@ -25,6 +25,12 @@ jobs:
       run: npm install -g newman-reporter-html
     
     - name: Run Newman
-      run: /bin/bash -c "newman run JSONPlaceholderAPI.postman_collection.json -r html --reporter-html-export newman-report.html || true"
+      run: newman run JSONPlaceholderAPI.postman_collection.json -r html --reporter-html-export newman-report.html || true
+
+    - name: Upload Report as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: newman-report
+        path: newman-report.html
 
 
