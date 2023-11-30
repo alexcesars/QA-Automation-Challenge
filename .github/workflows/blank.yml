@@ -22,7 +22,7 @@ jobs:
       run: npm install -g newman
 
     - name: Run Newman
-      run: newman run path/to/your/collection.json -r html --reporter-html-export newman-report.html
+      run: newman run JSONPlaceholderAPI.postman_collection.json -r html --reporter-html-export newman-report.html
 
     - name: Publish Report
       uses: actions/upload-artifact@v2
