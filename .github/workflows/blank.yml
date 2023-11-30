@@ -27,18 +27,4 @@ jobs:
     - name: Run Newman
       run: newman run JSONPlaceholderAPI.postman_collection.json 
 
-    - name: Publish Report
-      uses: actions/upload-artifact@v2
-      with:
-        name: newman-report
-        path: newman-report.html
-
-    - name: Deploy report to Github Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v2
-      env:
-        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: .
-
-
+   
