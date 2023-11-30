@@ -21,6 +21,9 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
 
+    - name: Install Newman
+      run: npm install newman-reporter-html      
+
     - name: Run Newman
       run: newman run JSONPlaceholderAPI.postman_collection.json -r html --reporter-html-export newman-report.html
 
