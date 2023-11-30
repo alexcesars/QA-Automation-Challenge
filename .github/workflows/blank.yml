@@ -33,3 +33,7 @@ jobs:
         name: newman-report
         path: newman-report.html
 
+    - name: Deploy report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v2
+
