@@ -1,0 +1,457 @@
+{
+	"info": {
+		"_postman_id": "c14897d6-26d7-43af-a582-09a8c67f52ec",
+		"name": "JSONPlaceholder API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17355772"
+	},
+	"item": [
+		{
+			"name": "Consultas",
+			"item": [
+				{
+					"name": "Consulta 100 posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validação do title\", function () {\r",
+									"   pm.expect(pm.response.json()[0].title).to.be.eql(\"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\"); \r",
+									"      \r",
+									"});\r",
+									"\r",
+									"// Validação do campo id com loop, de forma sequencial \r",
+									"\r",
+									"// Variável para armazenar o valor esperado do ID\r",
+									"var expectedId = 1;\r",
+									"\r",
+									"// Loop através do array e validar o campo \"id\"\r",
+									"pm.response.json().forEach(function(item) {\r",
+									"    pm.test(`O campo 'id' deve ser ${expectedId}`, function() {\r",
+									"        pm.expect(item.id).to.equal(expectedId);\r",
+									"        expectedId++; // Incrementar o valor esperado para o próximo item\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta validação por filtro de range",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Exemplo de validação da estrutura do contrato com schema\r",
+									"\r",
+									"var schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": {\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"            \"userId\": { \"type\": \"integer\" },\r",
+									"            \"id\": { \"type\": \"integer\" },\r",
+									"            \"title\": { \"type\": \"string\" },\r",
+									"            \"body\": { \"type\": \"string\" }\r",
+									"        },\r",
+									"        \"required\": [\"userId\", \"id\", \"title\", \"body\"]\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.test(\"Validar Estrutura do schema do contrato\", function () {\r",
+									"    pm.response.to.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Validação do filtro feito com ID \r",
+									"\r",
+									"pm.test(\"Validar ID 21 e 22 conforme filtro de range\", function () {\r",
+									"   pm.expect(pm.response.json()[0].id).to.be.eql(21); \r",
+									"   pm.expect(pm.response.json()[1].id).to.be.eql(22); \r",
+									"      \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts?_start=20&_end=22",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "_start",
+									"value": "20"
+								},
+								{
+									"key": "_end",
+									"value": "22"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta validação por filtro paginação",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// exemplo de validação do campo  title\r",
+									"\r",
+									"pm.test(\"Validar title\", function () {\r",
+									"   pm.expect(pm.response.json()[0].title).to.be.eql(\"eum et est occaecati\"); \r",
+									"      \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"// Variável para armazenar o valor esperado do ID conforme passado paginação\r",
+									"var expectedId = 4;\r",
+									"\r",
+									"// Loop através do array e validar o campo \"id\"\r",
+									"pm.response.json().forEach(function(item) {\r",
+									"    pm.test(`O campo 'id' deve ser ${expectedId}`, function() {\r",
+									"        pm.expect(item.id).to.equal(expectedId);\r",
+									"        expectedId++; // Incrementar o valor esperado para o próximo item\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// podemos implementar uma melhoria de paginação para facilitar o front e mostrar quantas paginas temos e o total de itens, como no exemplo abaixo:\r",
+									"\r",
+									"// { \"page\": 1, \"pageSize\": 10, \"totalItems\": 100, \"data\": [ { \"userId\": 1, \"id\": 1, \"title\": \"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\", \"body\": \"quia et suscipit\\nsuscipit...autem vel illum qui dolor\" }, // ... outros itens da página ... ] }"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts?_page=2&_limit=3",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "_page",
+									"value": "2"
+								},
+								{
+									"key": "_limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta validação por ordenação",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Variável para armazenar o valor esperado do ID\r",
+									"var expectedId = 100;\r",
+									"\r",
+									"// Loop através do array e validar o campo \"id\"\r",
+									"pm.response.json().forEach(function(item) {\r",
+									"    pm.test(`O campo 'id' deve ser ${expectedId}`, function() {\r",
+									"        pm.expect(item.id).to.equal(expectedId);\r",
+									"        expectedId--; // Decrementar o valor esperado para o próximo item\r",
+									"    });\r",
+									"    console.log (expectedId)\r",
+									"});\r",
+									"\r",
+									"//  Teste por ordenção descendente não esta funcionando e por isso os teste estão se quebrando"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts?_sort=user&_order=desc",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "_sort",
+									"value": "user"
+								},
+								{
+									"key": "_order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inclusão",
+			"item": [
+				{
+					"name": "Criação de um objeto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Criação do schema\r",
+									"var schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"title\": { \"type\": \"string\" },\r",
+									"    \"body\": { \"type\": \"string\" },\r",
+									"    \"userId\": { \"type\": \"integer\" },\r",
+									"    \"id\": { \"type\": \"integer\" }\r",
+									"  },\r",
+									"  \"required\": [\"title\", \"body\", \"userId\", \"id\"]\r",
+									"};\r",
+									"\r",
+									"pm.test(\"Validar Estrutura do schema do contrato\", function () {\r",
+									"    pm.response.to.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//exemplode validação do body individual\r",
+									"pm.test(\"Validar do body\", function () {\r",
+									"   pm.expect(pm.response.json().title).to.be.eql(\"foo\"); \r",
+									"   pm.expect(pm.response.json().body).to.be.eql(\"bar\"); \r",
+									"   pm.expect(pm.response.json().userId).to.be.eql(1); \r",
+									"   pm.expect(pm.response.json().id).to.be.eql(101); \r",
+									"      \r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"foo\",\r\n    \"body\": \"bar\",\r\n    \"userId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criação de dois objeto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//exemplo de valição de tempo de resposta\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//exemplo de validação do body individual\r",
+									"pm.test(\"Validação do body individual 0\", function () {\r",
+									"   pm.expect(pm.response.json()[0].title).to.be.equal(\"bar\"); \r",
+									"   pm.expect(pm.response.json()[0].body).to.be.equal(\"teste\"); \r",
+									"   pm.expect(pm.response.json()[0].userId).to.be.equal(101); \r",
+									"         \r",
+									"});\r",
+									"\r",
+									"//exemplo de validação do body individual\r",
+									"pm.test(\"Validação do body individual 1\", function () {\r",
+									"   pm.expect(pm.response.json()[1].title).to.be.equal(\"bar2\"); \r",
+									"   pm.expect(pm.response.json()[1].body).to.be.equal(\"teste2\"); \r",
+									"   pm.expect(pm.response.json()[1].userId).to.be.equal(102); \r",
+									"         \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"title\": \"bar\",\r\n        \"body\": \"teste\",\r\n        \"userId\": 101\r\n    },\r\n    {\r\n        \"title\": \"bar2\",\r\n        \"body\": \"teste2\",\r\n        \"userId\": 102\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Exemplo de cenario negativo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// neste teste não temos nenhum erro tratado somente um 404, dificultando a tratativa de erro por usuario."
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"title\": \"bar\",\r\n        \"body\": \"teste\",\r\n        \"userId\": 101\r\n    },\r\n    {\r\n        \"title\": \"bar2\",\r\n        \"body\": \"teste2\",\r\n        \"userId\": 102\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
