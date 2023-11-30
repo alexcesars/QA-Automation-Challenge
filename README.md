@@ -4,6 +4,8 @@
 
 A primeira parte do desafio entendimento da documentação e fazer as chamadas nos metodos GET e POST para o endpoint /post.
 
+Dentro da collection tem comentarios das validações que foi feita em cada cenario de teste
+
 ## Levantado os cenarios:
 
 ## Metodo GET
