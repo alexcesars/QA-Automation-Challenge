@@ -21,8 +21,11 @@ jobs:
     - name: Install Newman
       run: npm install -g newman
 
-    - name: Install Newman
-      run: npm install newman-reporter-html      
+    - name: Install Newman report 
+      run: npm install newman-reporter-html 
+      
+    - name: Install Newman report htmlextra
+      run: npm install -g newman-reporter-htmlextra
 
     - name: Run Newman
       run: newman run JSONPlaceholderAPI.postman_collection.json -r html --reporter-html-export newman-report.html
@@ -33,7 +36,10 @@ jobs:
         name: newman-report
         path: newman-report.html
 
-    - name: Deploy report to Github Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v2
+    - name: Deploy to GitHub Pages
+      uses: jamesgeorge007/github-pages-deploy-action@4.1.4
+      with:
+        branch: gh-pages
+        folder: .
+
 
