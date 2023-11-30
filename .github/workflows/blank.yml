@@ -36,9 +36,10 @@ jobs:
         name: newman-report
         path: newman-report.html
 
-    - name: Deploy to GitHub Pages
-      uses: jamesgeorge007/github-pages-deploy-action@4.1.4
-      with:
+    - name: Deploy report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v2
+      env:
         branch: gh-pages
         folder: .
 
