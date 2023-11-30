@@ -1,16 +1,32 @@
-name: Newman Run
+name: Run Postman Collection
+
 on:
   push:
     branches:
-       - master
-  workflow_dispatch:
+      - main
 
 jobs:
   newman:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-      - uses: matt-ball/newman-action@master
-        with:
-          apiKey: ${{ secrets.postmanApiKey }}
-          collection: JSONPlaceholderAPI.postman_collection.json  --reporters=cli,htmlextra
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install Newman
+      run: npm install -g newman
+
+    - name: Run Newman
+      run: newman run path/to/your/collection.json -r html --reporter-html-export newman-report.html
+
+    - name: Publish Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: newman-report
+        path: newman-report.html
+
