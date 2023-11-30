@@ -13,4 +13,4 @@ jobs:
       - uses: matt-ball/newman-action@master
         with:
           apiKey: ${{ secrets.postmanApiKey }}
-          collection: JSONPlaceholderAPI.postman_collection.json
+          collection: JSONPlaceholderAPI.postman_collection.json  --reporters=cli,htmlextra
