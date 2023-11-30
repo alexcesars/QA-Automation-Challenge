@@ -27,4 +27,3 @@ jobs:
     - name: Run Newman
       run: newman run JSONPlaceholderAPI.postman_collection.json -r html --reporter-html-export newman-report.html || true
 
-   
