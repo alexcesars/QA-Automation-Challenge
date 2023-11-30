@@ -1,0 +1,16 @@
+name: Newman Run
+on:
+  push:
+    branches:
+       - master
+  workflow_dispatch:
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: matt-ball/newman-action@master
+        with:
+          apiKey: ${{ secrets.postmanApiKey }}
+          collection: JSONPlaceholderAPI.postman_collection.json
